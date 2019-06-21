@@ -1,0 +1,38 @@
+heat_template_version: 2015-04-30
+
+description: Security Setting template.
+
+parameters:
+  port_1:
+    type: number
+    description: Port which needs to be exposed.
+  port_2:
+    type: number
+    description: Port which needs to be exposed.
+  port_3:
+    type: number
+    description: Port which needs to be exposed.
+
+resources:
+  project_security_group:
+    type: OS::Neutron::SecurityGroup
+    properties:
+      name: project_security_group
+      rules:
+        - remote_ip_prefix: 0.0.0.0/0 
+          protocol: tcp
+          port_range_min: { get_param: port_1 }
+          port_range_max: { get_param: port_1 }
+        - remote_ip_prefix: 0.0.0.0/0 
+          protocol: tcp
+          port_range_min: { get_param: port_2 }
+          port_range_max: { get_param: port_2 }
+        - remote_ip_prefix: 0.0.0.0/0 
+          protocol: tcp
+          port_range_min: { get_param: port_3 }
+          port_range_max: { get_param: port_3 }
+
+outputs:
+  security_group_id:
+    description: Security Group ID
+    value: {get_resource: project_security_group}
